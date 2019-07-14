@@ -49,7 +49,7 @@ x_val=data[s:]
 y_val=label[s:]
 
 #-----------------构建网络----------------------
-x=tf.placeholder(tf.float32,shape=[None,512],name='x')
+x=tf.placeholder(tf.float32,shape=[None,w, h, c],name='x')
 y_=tf.placeholder(tf.int32,shape=[None,],name='y_')
  
 def inference(input_tensor, train, regularizer):
@@ -110,10 +110,10 @@ def inference(input_tensor, train, regularizer):
         if train: fc2 = tf.nn.dropout(fc2, 0.5)
  
     with tf.variable_scope('layer11-fc3'):
-        fc3_weights = tf.get_variable("weight", [512, 5],
+        fc3_weights = tf.get_variable("weight", [512, 17],
                                       initializer=tf.truncated_normal_initializer(stddev=0.1))
         if regularizer != None: tf.add_to_collection('losses', regularizer(fc3_weights))
-        fc3_biases = tf.get_variable("bias", [5], initializer=tf.constant_initializer(0.1))
+        fc3_biases = tf.get_variable("bias", [17], initializer=tf.constant_initializer(0.1))
         logit = tf.matmul(fc2, fc3_weights) + fc3_biases
  
     return logit

@@ -15,7 +15,7 @@ output_dir='output'
 if not os.path.exists(output_dir):
     os.mkdir(output_dir)
 # 数据准备 - 读取图片并贴标签
-img_dir = './Images/'
+img_dir = './flower_photos/'
 images=[]
 labels=[]
 isFirst=0
@@ -28,22 +28,25 @@ for idx,folder in enumerate(cate):
     for im in glob.glob(folder+'/*.jpg'):
         #print('reading the images:%s'%(im))
         img=cv2.imread(str(im),cv2.IMREAD_COLOR)
-        
+        #img=transform.resize(img,(w,h,3))
         imgs.append(img)
         if isFirst<1:
             print(img)
             isFirst = 1
-        label = ((str(im).split('/')[2]).split('\\')[0]).split('-')[1]
+        label = ((str(im).split('/')[2]).split('\\')[0])
         labels.append(label)
+ 
 
 print(labels)
 label_encoder = LabelEncoder()
 y = label_encoder.fit_transform(labels)
 print(y)
 
-train_idx,test_idx = train_test_split(range(len(y)),test_size=0.2,stratify = y, random_state = 1234)    
+train_idx,test_idx = train_test_split(range(len(y)),test_size=0.2,stratify = y, random_state = 1234)    # 返回拆分后的索引
 train_y = y[train_idx]
 test_y = y[test_idx]
+#print(train_y)
+#print(test_y)
 
 # 计算RGB颜色直方图
 
